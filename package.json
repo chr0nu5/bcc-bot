@@ -1,0 +1,10 @@
+{
+  "name": "node-latex-bot",
+  "version": "0.0.1",
+  "private": true,
+  "description": "A Node.js Bot for Slack to compile LaTeX documents.",
+  "repository": "https://github.com/chr0nu5/node-latex-bot",
+  "dependencies": {
+    "latex": "0.0.1"
+  }
+}
