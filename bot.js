@@ -12,6 +12,16 @@ var child = execSync(dir, (err, stdout, stderr) => {
     }
 });
 
+function convertToLaTeX(array) {
+    var tmpFile = `./pdf/${Date.now()}.pdf`,
+        ws = fs.createWriteStream(tmpFile);
+    ws.on('finish', function() {
+        console.log('done');
+    });
+    var converted = latex(array).pipe(ws);
+    return tmpFile;
+}
+
 var alan = new SlackBot({
     token: config.SLACK_BOT_TOKEN,
     name: 'Alan Turing'
@@ -29,8 +39,10 @@ alan.on('message', function(data) {
         var regex = data.text.match(/\[(.*?)\]/i);
         if (regex && regex[1]) {
             var command = regex[1];
-            var content = data.text.replace('['+command+']','').trim();
-            alan.postMessage(data.user,'Command `'+command+'` received.', {"as_user": true});
+            var content = data.text.replace('[' + command + ']', '').trim();
+            alan.postMessage(data.user, 'Command `' + command + '` received.', {
+                "as_user": true
+            });
 
             //process LaTeX documents
             if (command === "latex") {
@@ -43,18 +55,6 @@ alan.on('message', function(data) {
         }
     }
 });
-
-
-
-function convertToLaTeX(array) {
-    var tmpFile = `./pdf/${Date.now()}.pdf`,
-        ws = fs.createWriteStream(tmpFile);
-    ws.on('finish', function() {
-        console.log('done');
-    });
-    var converted = latex(array).pipe(ws);
-    return tmpFile;
-}
 
 /*
 [latex]
